@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traductor de Etiquetas Pro - Edición Botánica</title>
+    <style>
+        :root {
+            --primary: #556b2f;
+            --primary-light: #6b8e23;
+            --bg: #efe6dd;
+            --card-bg: #ffffff;
+            --text: #3e2723;
+            --border: #d7ccc8;
+            --alert-bg: #fff3cd;
+            --alert-text: #856404;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M20,30 Q30,10 50,30 Q30,50 20,30 Z M50,30 Q60,10 80,30 Q60,50 50,30 Z' fill='%23dfd4c8'/%3E%3Cpath d='M30,70 Q40,50 60,70 Q40,90 30,70 Z' fill='%23dfd4c8'/%3E%3C/svg%3E");
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(93, 64, 55, 0.15);
+            border: 1px solid #e0d4c8;
+            position: relative;
+        }
+
+        .container::before {
+            content: "🌿";
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            font-size: 30px;
+            background: var(--bg);
+            border-radius: 50%;
+            padding: 5px;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-top: 0;
+            font-size: 26px;
+            border-bottom: 2px solid #efe6dd;
+            padding-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #6d4c41;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        .ingredient-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .input-text {
+            flex: 2.5;
+            padding: 11px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #faf8f5;
+        }
+
+        .input-number {
+            flex: 1;
+            padding: 11px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #faf8f5;
+        }
+
+        .select-unit {
+            flex: 1;
+            padding: 11px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #faf8f5;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .btn-add {
+            background-color: #f5f0ea;
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 25px;
+            transition: all 0.2s;
+        }
+
+        .btn-add:hover { background-color: #e8dfd5; }
+
+        .btn-process {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(85, 107, 47, 0.3);
+        }
+
+        .btn-process:hover { background-color: var(--primary-light); }
+
+        .results {
+            margin-top: 35px;
+            display: none;
+        }
+
+        .label-preview {
+            background: #fffdfa;
+            border: 2px dashed var(--primary);
+            padding: 22px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #2b1d1a;
+            line-height: 1.7;
+            margin-top: 10px;
+        }
+
+        .alert-box {
+            background-color: var(--alert-bg);
+            color: var(--alert-text);
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 5px solid #ffeeba;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Traductor de Etiquetas Reguladas 🌿</h1>
+    <p class="subtitle">Configura tus ingredientes, valores y unidades. El sistema los listará en estricto orden descendente conforme a la ley internacional de cosmética.</p>
+
+    <div id="ingredientsContainer">
+        <div class="ingredient-row">
+            <input type="text" class="input-text" placeholder="Ingrediente" value="agua">
+            <input type="number" class="input-number" placeholder="Cantidad" value="8">
+            <select class="select-unit">
+                <option value="g">g (Gramos)</option>
+                <option value="oz" selected>oz (Onzas)</option>
+                <option value="lb">lb (Libras)</option>
+                <option value="ml">ml (Mililitros)</option>
+                <option value="%">% (Porcentaje)</option>
+                <option value="gotas">gotas</option>
+            </select>
+        </div>
+        <div class="ingredient-row">
+            <input type="text" class="input-text" placeholder="Ingrediente" value="oliva">
+            <input type="number" class="input-number" placeholder="Cantidad" value="12">
+            <select class="select-unit">
+                <option value="g">g (Gramos)</option>
+                <option value="oz" selected>oz (Onzas)</option>
+                <option value="lb">lb (Libras)</option>
+                <option value="ml">ml (Mililitros)</option>
+                <option value="%">% (Porcentaje)</option>
+                <option value="gotas">gotas</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="btn-add" onclick="agregarFila()">+ Añadir Ingrediente</button>
+    <button class="btn-process" onclick="generarEtiquetaLegal()">Generar Etiqueta Organizada</button>
+
+    <div id="resultsSection" class="results">
+        <h2>📋 Tu Listado de Ingredientes INCI</h2>
+        <p style="color: #6d4c41;"><small>Ordenados matemáticamente de mayor a menor según el valor numérico ingresado:</small></p>
+        
+        <div id="finalLabel" class="label-preview"></div>
+
+        <div id="allergenAlert" class="alert-box" style="display: none;">
+            <strong>⚠️ Reporte de Alérgenos Obligatorios:</strong>
+            <div id="allergenList" style="margin-top: 8px;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const baseDatosINCI = {
+        "agua": { inci: "Aqua", alergenos: null },
+        "oliva": { inci: "Olea Europaea Fruit Oil", alergenos: null },
+        "coco": { inci: "Cocos Nucifera Oil", alergenos: null },
+        "almendras": { inci: "Prunus Amygdalus Dulcis Oil", alergenos: null },
+        "lavanda": { inci: "Lavandula Angustifolia Oil", alergenos: "Linalool, Limonene" },
+        "limon": { inci: "Citrus Limon Peel Oil", alergenos: "Limonene, Citral" },
+        "sosa": { inci: "Sodium Hydroxide", alergenos: null },
+        "glicerina": { inci: "Glycerin", alergenos: null },
+        "karite": { inci: "Butyrospermum Parkii Butter", alergenos: null }
+    };
+
+    function agregarFila() {
+        const container = document.getElementById("ingredientsContainer");
+        const nuevaFila = document.createElement("div");
+        nuevaFila.className = "ingredient-row";
+        nuevaFila.innerHTML = `
+            <input type="text" class="input-text" placeholder="Ingrediente">
+            <input type="number" class="input-number" placeholder="Cantidad">
+            <select class="select-unit">
+                <option value="g" selected>g (Gramos)</option>
+                <option value="oz">oz (Onzas)</option>
+                <option value="lb">lb (Libras)</option>
+                <option value="ml">ml (Mililitros)</option>
+                <option value="%">% (Porcentaje)</option>
+                <option value="gotas">gotas</option>
+            </select>
+        `;
+        container.appendChild(nuevaFila);
+    }
+
+    function generarEtiquetaLegal() {
+        const filas = document.querySelectorAll(".ingredient-row");
+        let listaProductos = [];
+        let alergenosDetectados = new Set();
+
+        filas.forEach(fila => {
+            const nombre = fila.querySelector(".input-text").value.toLowerCase().trim();
+            const cantidad = parseFloat(fila.querySelector(".input-number").value) || 0;
+            const unidad = fila.querySelector(".select-unit").value;
+
+            if (nombre && cantidad > 0) {
+                let nombreINCI = nombre;
+                let datosCosmeticos = null;
+
+                for (let clave in baseDatosINCI) {
+                    if (nombre.includes(clave)) {
+                        nombreINCI = baseDatosINCI[clave].inci;
+                        datosCosmeticos = baseDatosINCI[clave];
+                        break;
+                    }
+                }
+
+                listaProductos.push({
+                    inci: nombreINCI,
+                    valor: cantidad,
+                    unidadMedida: unidad,
+                    datos: datosCosmeticos
+                });
+            }
+        });
+
+        if (listaProductos.length === 0) {
+            alert("Por favor ingresa ingredientes válidos con su respectiva cantidad.");
+            return;
+        }
+
+        // Ordenar de manera descendente
+        listaProductos.sort((a, b) => b.valor - a.valor);
+
+        let nombresINCIOrdenados = [];
+        listaProductos.forEach(prod => {
+            nombresINCIOrdenados.push(`${prod.inci} (${prod.valor}${prod.unidadMedida})`);
+            
+            if (prod.datos && prod.datos.alergenos) {
+                alergenosDetectados.add(`${prod.inci}: Contiene [${prod.datos.alergenos}]`);
+            }
+        });
+
+        document.getElementById("resultsSection").style.display = "block";
+        document.getElementById("finalLabel").innerText = "INGREDIENTS: " + nombresINCIOrdenados.join(", ") + ".";
+
+        const boxAlergenos = document.getElementById("allergenAlert");
+        const listaAlergenosDiv = document.getElementById("allergenList");
+        
+        if (alergenosDetectados.size > 0) {
+            boxAlergenos.style.display = "block";
+            listaAlergenosDiv.innerHTML = Array.from(alergenosDetectados).map(a => `<p style="margin:4px 0;">• ${a}</p>`).join("");
+        } else {
+            boxAlergenos.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>
